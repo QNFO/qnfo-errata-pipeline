@@ -6,9 +6,11 @@ Cloud-native errata pipeline for QNFO published papers. Fully autonomous: detect
 
 | Worker | Version | Cron | Role |
 |---|---|---|---|
-| `qnfo-errata-watch` | 0.2.0 | `0 * * * *` | Detect errata emails (Workers AI classification + DOI extraction) → `errata_queue` |
-| `qnfo-errata-respond` | 0.4.0 | `15 * * * *` | Resolve paper (concept-DOI fallback) → AI-draft surgical additive correction → stage in `errata_actions` → notify |
-| `qnfo-errata-publish` | 0.6.0 | `30 * * * *` | Zenodo newversion (replace `.md`/`.html`/`.pdf`) → re-point D1/KG/R2 → notify |
+| `qnfo-errata-watch` | 0.2.1 | `0 * * * *` | Detect errata emails (Workers AI classification + DOI extraction) → `errata_queue` |
+| `qnfo-errata-respond` | 0.4.1 | `15 * * * *` | Resolve paper (concept-DOI fallback) → AI-draft surgical additive correction → stage in `errata_actions` → notify |
+| `qnfo-errata-publish` | 0.6.0 | `30 * * * *` | Zenodo newversion (replace `.md`/`.html`/`.pdf`; in-Worker PDF) → re-point D1/KG/R2 → notify |
+
+All three worker sources are in this repo: `watch-worker.js` (0.2.1), `respond-worker.js` (0.4.1), `publish-worker-src.js` (0.6.0). Every worker's `authorized()` **fails closed** (missing `ERRATA_TOKEN` ⇒ all `/run/*` + `/debug/*` rejected) — kaizen `AUTH-FAIL-CLOSED-1`.
 
 ## publish worker — in-Worker PDF regeneration (v0.6.0)
 
